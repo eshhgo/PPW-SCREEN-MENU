@@ -729,17 +729,21 @@ body.opened #lang{opacity:1;pointer-events:auto}
 
   // ===== 섹션 제목(TACOS · SIDE · DRINKS …) : 가능한 만큼 키우기 (최대 3배, 폭·높이 안에서) =====
   function fitHeadings(){
-    document.querySelectorAll('.menu-sec h2').forEach(h=>{
+    const hs=[...document.querySelectorAll('.menu-sec h2')];
+    if(!hs.length) return;
+    let cap=Infinity, base=Infinity;
+    hs.forEach(h=>{
       h.style.fontSize='';
-      const base=parseFloat(getComputedStyle(h).fontSize);
+      base=Math.min(base,parseFloat(getComputedStyle(h).fontSize));
       const avail=h.getBoundingClientRect().width;
       h.style.fontSize='100px';
-      const rg=document.createRange();
-      rg.setStart(h,0); rg.setEnd(h, h.childNodes.length? Math.max(0,[...h.childNodes].findIndex(n=>n.nodeType===1&&n.classList&&n.classList.contains('kr'))) : 0);
+      const kr=[...h.childNodes].findIndex(n=>n.nodeType===1&&n.classList&&n.classList.contains('kr'));
+      const rg=document.createRange(); rg.setStart(h,0); rg.setEnd(h,kr<0?h.childNodes.length:kr);
       const w=rg.getBoundingClientRect().width||1;
-      const fit=100*avail/w;
-      h.style.fontSize=Math.min(fit,base*3,innerHeight*0.26).toFixed(1)+'px';
+      cap=Math.min(cap,100*avail/w);                      // 가장 긴 제목이 들어가는 크기에 전부 맞춤
     });
+    const fs=Math.min(cap,base*3,innerHeight*0.26).toFixed(1)+'px';
+    hs.forEach(h=>h.style.fontSize=fs);
   }
   addEventListener('resize',fitHeadings); document.fonts.ready.then(fitHeadings); fitHeadings();
 
