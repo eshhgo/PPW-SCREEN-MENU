@@ -135,10 +135,14 @@ img,svg{max-width:100%}
 body.opened.tabs-in #tabs{transform:translate(0,-50%)}
 #tabs .tab{transition:background .25s,color .25s,transform .4s}
 body.opened.tabs-in #tabs .tab:nth-child(2){transition-delay:0s,0s,.05s}
-.tab{position:relative;display:block;flex:none;width:var(--tab-w);padding:var(--tab-pad) 0;background:var(--orange);color:var(--red);border:none;border-left:3px solid var(--red);font-family:var(--display-en);font-weight:700;font-size:var(--tab-fs);letter-spacing:.03em;line-height:var(--tab-w);cursor:pointer;
-  writing-mode:vertical-rl;border-radius:4px 0 0 4px;overflow:visible;transition:background .25s,color .25s}
+.tab{position:relative;display:flex;align-items:center;justify-content:center;flex:none;width:var(--tab-w);padding:var(--tab-pad) 0;
+  background:var(--orange);color:var(--red);border:none;border-left:3px solid var(--red);border-radius:4px 0 0 4px;
+  overflow:hidden;cursor:pointer;transition:background .25s,color .25s}
+.tab .tab-t{display:block;writing-mode:vertical-rl;font-family:var(--display-en);font-weight:700;font-size:var(--tab-fs);letter-spacing:.03em;line-height:1.05;white-space:nowrap}
+/* 세로쓰기를 지원하지 않는 브라우저용 대비책 : 글자를 90도 돌려서 표시 */
+.tab.rot .tab-t{writing-mode:horizontal-tb;transform:rotate(90deg);transform-origin:50% 50%}
 /* 보이는 폭은 그대로 두고, 손가락으로 누르기 쉽게 터치 영역만 본문 쪽으로 넓힘 */
-.tab::before{content:"";position:absolute;top:-4px;bottom:-4px;right:0;left:calc(-1 * var(--tab-hit))}
+.tab::before{content:"";position:absolute;top:-4px;bottom:-4px;right:0;left:calc(-1 * var(--tab-hit));z-index:1}
 .tab.active{background:var(--paper);color:var(--red);border-left-color:var(--red-deep)}
 .tab:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 
@@ -273,13 +277,14 @@ body,.menu-sec.red,.foot{background-image:var(--noise);background-size:var(--noi
 #outdoor .close-hint{position:absolute;bottom:4vh;left:0;right:0;text-align:center;color:var(--paper);font-family:var(--display-kr);font-size:clamp(14px,1.8vmin,22px);opacity:.85}
 
 /* ===== 가격 : 메뉴 이름 바로 아래 줄, 영문명 오른쪽 (메뉴판처럼 이름 ↔ 가격 한 줄) ===== */
-.en-row{display:flex;align-items:baseline;justify-content:space-between;gap:.8em;margin-top:.35em}
+.en-row{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;column-gap:.8em;row-gap:.1em;margin-top:.35em}
+.en-row .price{margin-left:auto}
 .en-row .en{margin-top:0;min-width:0}
-.price{flex:none;font-family:"PPW Wordmark",var(--latin);font-weight:700;font-size:clamp(18px,1.8vw,30px);letter-spacing:.01em;white-space:nowrap;line-height:1}
+.price{flex:none;font-family:"PPW Wordmark",var(--latin);font-weight:700;font-size:max(20px,min(clamp(54px,5.4vw,90px),4.6vw));letter-spacing:.01em;white-space:nowrap;line-height:1}
 .price .won{font-size:.92em}
 .menu-sec.red .price{color:var(--paper)}
 .menu-sec.orange .price{color:var(--red)}
-.item.feature .price{color:var(--red);font-size:clamp(22px,2.6vw,42px)}
+.item.feature .price{color:var(--red);font-size:max(24px,min(clamp(66px,7.8vw,126px),5vw))}
 .item.feature .en-row{justify-content:flex-start;flex-wrap:wrap;column-gap:1em}
 /* ===== 주류 : 사진 없이 메뉴판처럼 3단 리스트 ===== */
 .drink-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:clamp(20px,3vw,56px)}
@@ -288,7 +293,7 @@ body,.menu-sec.red,.foot{background-image:var(--noise);background-size:var(--noi
 .drink .kr{font-family:var(--display-kr);font-size:max(26px,min(clamp(30px,4.4vw,72px),3.4vw));line-height:1.1;color:var(--orange)}
 .drink .en{font-family:var(--display-en);font-weight:700;font-size:max(13px,min(clamp(14px,2vw,30px),1.5vw));letter-spacing:.06em;color:var(--paper)}
 .drink .en-row{margin-top:.35em}
-.drink .price{font-size:max(13px,min(clamp(15px,1.6vw,26px),1.4vw));text-align:right}
+.drink .price{font-size:max(15px,min(clamp(45px,4.8vw,78px),2.5vw));text-align:right}
 .drink .price .ln{display:block;white-space:nowrap}
 .drink .price .lbl{font-size:.72em;opacity:.8}
 .drink .price .sep{opacity:.6}
@@ -363,11 +368,11 @@ body,.menu-sec.red,.foot{background-image:var(--noise);background-size:var(--noi
 
 <!-- ===================== 북마크 ===================== -->
 <nav id="tabs" aria-label="메뉴 바로가기">
-  <button class="tab" data-target="tacos">TACOS</button>
-  <button class="tab" data-target="quesadilla">QUESADILLA</button>
-  <button class="tab" data-target="fajita">FAJITA &amp; BURRITO</button>
-  <button class="tab" data-target="side">SIDE</button>
-  <button class="tab" data-target="drinks">DRINKS</button>
+  <button class="tab" data-target="tacos"><span class="tab-t">TACOS</span></button>
+  <button class="tab" data-target="quesadilla"><span class="tab-t">QUESADILLA</span></button>
+  <button class="tab" data-target="fajita"><span class="tab-t">FAJITA &amp; BURRITO</span></button>
+  <button class="tab" data-target="side"><span class="tab-t">SIDE</span></button>
+  <button class="tab" data-target="drinks"><span class="tab-t">DRINKS</span></button>
 </nav>
 
 <main>
@@ -658,15 +663,31 @@ body,.menu-sec.red,.foot{background-image:var(--noise);background-size:var(--noi
   const tabsEl=document.getElementById('tabs'), rootEl=document.documentElement;
   function fitTabs(){
     rootEl.style.removeProperty('--tab-fs'); rootEl.style.removeProperty('--tab-pad');
-    const cs=getComputedStyle(tabs[0]);
-    let fs=parseFloat(cs.fontSize), pad=parseFloat(cs.paddingTop);
+    tabs.forEach(t=>{t.classList.remove('rot'); t.style.height='';});
     const w=parseFloat(getComputedStyle(rootEl).getPropertyValue('--tab-w'))||46;
-    if(fs>w*0.62){ fs=w*0.62; rootEl.style.setProperty('--tab-fs',fs.toFixed(1)+'px'); }   // 글자가 탭 폭을 넘지 않게
+    let fs=parseFloat(getComputedStyle(tabs[0].querySelector('.tab-t')).fontSize);
+    if(fs>w*0.62){ fs=w*0.62; rootEl.style.setProperty('--tab-fs',fs.toFixed(1)+'px'); }
+    // 세로쓰기가 통했는지 검사 (글자 상자가 가로로 길면 실패한 것)
+    const t0=tabs[0].querySelector('.tab-t').getBoundingClientRect();
+    const vertical=t0.height>t0.width;
+    tabs.forEach(t=>{
+      if(!vertical){
+        t.classList.add('rot');
+        const s=t.querySelector('.tab-t').getBoundingClientRect();
+        t.style.height=Math.ceil(Math.max(s.width,s.height)+2*(parseFloat(getComputedStyle(t).paddingTop)||0))+'px';
+      }
+    });
     const gap=parseFloat(getComputedStyle(tabsEl).rowGap)||0;
     const total=()=>tabs.reduce((a,t)=>a+t.getBoundingClientRect().height,0)+gap*(tabs.length-1);
     const avail=innerHeight*0.96;
-    let t=total();
-    if(t>avail){ const k=avail/t; rootEl.style.setProperty('--tab-fs',(fs*k).toFixed(1)+'px'); rootEl.style.setProperty('--tab-pad',(pad*k).toFixed(1)+'px'); }
+    const t=total();
+    if(t>avail){
+      const k=avail/t;
+      rootEl.style.setProperty('--tab-fs',(fs*k).toFixed(1)+'px');
+      rootEl.style.setProperty('--tab-pad',((parseFloat(getComputedStyle(tabs[0]).paddingTop)||0)*k).toFixed(1)+'px');
+      if(!vertical) tabs.forEach(tb=>{ const s=tb.querySelector('.tab-t').getBoundingClientRect();
+        tb.style.height=Math.ceil(Math.max(s.width,s.height)+2*(parseFloat(getComputedStyle(tb).paddingTop)||0))+'px'; });
+    }
   }
   addEventListener('resize',fitTabs); document.fonts.ready.then(fitTabs); fitTabs();
 
