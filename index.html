@@ -676,9 +676,9 @@ body.opened #lang{opacity:1;pointer-events:auto}
 
   // ===== 무터치 시 자동 스크롤 : 첫 화면 → 맨 아래로 균일 속도 스윕, 터치하면 맨 위로 =====
   const AUTO_IDLE=25000;      // 손이 닿지 않고 25초 지나면 시작
-  const SWEEP_MS=75000;       // 맨 위 → 맨 아래 한 번 훑는 시간
+  const SWEEP_MS=25000;       // 맨 위 → 맨 아래 한 번 훑는 시간 (3배 빠르게)
   const HOLD_MS=4000;         // 맨 아래에서 잠깐 멈춤
-  let autoTimer=null, autoRaf=0, autoLast=0, autoOn=false;
+  let autoTimer=null, autoRaf=0, autoLast=0, autoOn=false, autoPos=0;
   function autoStep(t){
     if(!autoOn) return;
     if(!autoLast) autoLast=t;
@@ -690,10 +690,11 @@ body.opened #lang{opacity:1;pointer-events:auto}
       setTimeout(()=>{ scrollTo({top:0,behavior:'smooth'}); autoTimer=setTimeout(startAuto,HOLD_MS+2500); },HOLD_MS);
       return;
     }
-    scrollTo(0, scrollY+speed*dt/1000);
+    autoPos=Math.min(max,autoPos+speed*dt/1000);
+    scrollTo({top:autoPos,behavior:'instant'});   // 프레임마다 소수점까지 더해 끊김 없이
     autoRaf=requestAnimationFrame(autoStep);
   }
-  function startAuto(){ if(autoOn) return; autoOn=true; autoLast=0; autoRaf=requestAnimationFrame(autoStep); }
+  function startAuto(){ if(autoOn) return; autoOn=true; autoLast=0; autoPos=scrollY; autoRaf=requestAnimationFrame(autoStep); }
   function stopAuto(){ autoOn=false; if(autoRaf) cancelAnimationFrame(autoRaf); autoRaf=0; clearTimeout(autoTimer); }
   function userTouch(){
     const wasAuto=autoOn;
