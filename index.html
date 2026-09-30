@@ -64,72 +64,6 @@ body{word-break:keep-all;background:var(--orange);color:var(--red);font-family:v
 img,svg{max-width:100%}
 .en-display{font-family:var(--display-en);font-weight:900;letter-spacing:0}
 
-/* ===================== 셔터 (실제 매장 파사드 차용) ===================== */
-#shutter{position:fixed;inset:0;z-index:50;cursor:pointer;overflow:hidden;
-  --stucco:#B9998A; --stucco-dk:#8F7263; --concrete:#BFAE9D;
-  --sign-y:#EDCB35; --sign-y-dk:#C9A20F; --sign-red:#CC4A3C;
-  --wall-y:#E1BE2C; --paint-red:#B23442; --ink-black:#221C19;
-  --row-top:17vh; --row-over:2.6vh; --row-sign:11vh; --row-counter:2.2vh; --row-lower:min(28vh,22vw);}
-#shutter.gone{pointer-events:none;visibility:hidden}
-.wall-top,.overhang,.pillar,.sign{background-size:var(--noise-size),100% 100%;}
-.facade{position:absolute;inset:0;display:grid;grid-template-rows:var(--row-top) var(--row-over) 1fr;
-  transform-origin:var(--zx,50%) var(--zy,65%);transition:transform .95s cubic-bezier(.6,0,.4,1),opacity .95s ease-in}
-#shutter.rolling [style*="filter"],#shutter.rolling .sign span,#shutter.rolling .wordmark,#shutter.rolling .arc-text{filter:none!important}
-.facade,.door{will-change:transform}
-#shutter.entering .facade{transform:scale(1.7);opacity:0}
-
-/* 윗벽 + 워드마크 */
-.wall-top{position:relative;background:var(--noise),linear-gradient(180deg,#C7A898,var(--stucco) 70%,#A98877);display:grid;place-items:center;overflow:hidden}
-.wordmark{font-family:"PPW Wordmark",var(--latin);font-weight:900;color:var(--ink-black);font-size:min(7vw,8.2vh);line-height:.95;text-align:center;filter:url(#rough-lite);opacity:.93}
-.wordmark small{display:block;font-weight:700;font-size:.28em;letter-spacing:.38em;margin-top:.45em;padding-left:.38em}
-/* 어닝 : 직각 콘크리트 슬래브 — 평평한 앞면 + 윗모서리 하이라이트 + 밑면(소핏) + 드리운 그림자 */
-.overhang{background:var(--noise),linear-gradient(180deg,var(--concrete),var(--concrete));position:relative;z-index:3;
-  box-shadow:inset 0 2px 0 rgba(255,250,240,.45),inset 0 -2px 0 rgba(60,45,30,.55)}
-.overhang::after{content:"";position:absolute;left:0;right:0;top:100%;height:1.3vh;
-  background:linear-gradient(180deg,#6A5B4E,#85766A);clip-path:polygon(0 0,100% 0,calc(100% - 1.4vw) 100%,1.4vw 100%)}
-.overhang::before{content:"";position:absolute;left:1.4vw;right:1.4vw;top:calc(100% + 1.3vh);height:3.2vh;pointer-events:none;
-  background:linear-gradient(180deg,rgba(25,12,0,.55),rgba(25,12,0,0))}
-
-/* 앞면 : 기둥 + 간판 + 셔터창 + 카운터 + 아랫벽 */
-.front{display:grid;grid-template-columns:3.6vw 1fr 3.6vw;grid-template-rows:var(--row-sign) 1fr;position:relative}
-.pillar{grid-row:1/-1;background:var(--noise),linear-gradient(90deg,#A88A7B,var(--stucco) 40%,#C4A596);position:relative}
-.pillar.left{grid-column:1;box-shadow:inset -.6vw 0 .8vw rgba(40,20,10,.28)}
-.pillar.right{grid-column:3;box-shadow:inset .6vw 0 .8vw rgba(40,20,10,.28)}
-/* 간판(어닝) : 직각 박스 — 평평한 앞면, 위는 어닝 그림자, 아래는 밑면 + 셔터에 드리운 그림자 */
-.sign{grid-column:2;grid-row:1;position:relative;z-index:2;display:flex;align-items:center;justify-content:space-evenly;
-  background:var(--noise),linear-gradient(180deg,var(--sign-y),var(--sign-y));
-  box-shadow:inset 0 2.2vh 1.6vh -1vh rgba(40,20,0,.38),inset 0 -2px 0 rgba(120,90,0,.6)}
-.sign::after{content:"";position:absolute;left:0;right:0;top:100%;height:1.2vh;background:linear-gradient(180deg,#8E6E00,#A8860E);
-  clip-path:polygon(0 0,100% 0,calc(100% - 1vw) 100%,1vw 100%)}
-.sign::before{content:"";position:absolute;left:1vw;right:1vw;top:calc(100% + 1.2vh);height:4vh;pointer-events:none;z-index:1;
-  background:linear-gradient(180deg,rgba(30,18,0,.55),rgba(30,18,0,0))}
-.sign span{font-family:"Bangers",Impact,sans-serif;color:var(--sign-red);font-size:min(7.4vh,8.6vw);letter-spacing:.05em;transform:skewX(-6deg) translateY(-.2vh);filter:url(#rough)}
-.window{grid-column:2;grid-row:2;position:relative;overflow:hidden;background:transparent}
-.door{position:absolute;inset:0;transition:transform 1.5s cubic-bezier(.5,.02,.4,1)}
-.door canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-#shutter.rolling .door{transform:translateY(-102%)}
-#shutter.rattle .door{animation:rattle .35s linear}
-@keyframes rattle{0%,100%{translate:0 0}20%{translate:0 -5px}40%{translate:0 3px}60%{translate:0 -2px}80%{translate:0 1px}}
-.window::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3vh;pointer-events:none;background:linear-gradient(180deg,rgba(30,18,0,0),rgba(30,18,0,.28))}
-.door-rail{position:absolute;left:0;right:0;bottom:0;height:1.5vh;background:linear-gradient(180deg,#9A968C,#6B675F);border-top:2px solid #4A463F}
-.door-rail::before{content:"";position:absolute;left:50%;top:-1.6vh;width:min(9vw,140px);height:1.1vh;transform:translateX(-50%);background:linear-gradient(180deg,#5C584F,#3A3730);border-radius:3px}
-
-/* 셔터 위 요소 */
-.badge{position:absolute;left:50%;top:3%;height:56%;max-width:92%;aspect-ratio:680/570;transform:translateX(-50%);overflow:visible}
-.badge .arc-text{font-family:"Rye",Georgia,serif;font-size:50px;fill:var(--paint-red);letter-spacing:3px}
-@media (orientation:portrait){.badge{top:12%;height:auto;width:80%}}
-.door .hint{position:absolute;left:0;right:0;bottom:4.4vh;text-align:center;font-family:var(--display-kr);color:var(--paint-red);font-size:min(clamp(54px,9vmin,114px),8.5vw)}
-.door .hint small{display:block;font-family:var(--display-en);font-weight:700;font-size:.44em;margin-top:.45em;letter-spacing:.22em}
-.door .hint span{display:inline-block;animation:bob 1.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-8px)}}
-
-
-@media (orientation:portrait){
-    }
-/* 빛과 질감 */
-.light{position:absolute;inset:0;pointer-events:none;opacity:.35;
-  background:linear-gradient(112deg,rgba(255,244,214,.55) 0%,rgba(255,244,214,0) 42%,rgba(40,20,0,0) 62%,rgba(40,20,0,.45) 100%)}
-
 /* ===================== 북마크 ===================== */
 #tabs{position:fixed;right:0;top:50%;transform:translate(115%,-50%);z-index:20;display:flex;flex-direction:column;align-items:flex-end;gap:min(16px,1.2vh);max-height:100vh;
   transition:transform .55s cubic-bezier(.2,.9,.3,1.15)}
@@ -166,7 +100,7 @@ main > section{padding-right:max(clamp(24px,6vw,110px),calc(var(--tab-w) + 18px)
 .hero-block .motto{text-align:center;justify-items:center}
 .hero-mark{display:grid;justify-items:center;width:fit-content;gap:clamp(14px,2.6vh,32px)}
 /* 흰 바탕을 곱하기로 지워 선만 배경 위에 찍힌 것처럼, 원형으로 잘라냄 */
-.hero-mark .aztec{display:block;height:clamp(100px,20vh,260px);width:auto;aspect-ratio:1;
+.hero-mark .aztec{display:block;height:var(--az-h,clamp(70px,16vh,240px));width:auto;aspect-ratio:1;
   }
 .motto{display:grid;gap:.35em;margin-top:calc(clamp(24px,4vh,48px) - 2 * clamp(8px,1.5vh,20px) - var(--my,0px));margin-bottom:calc(clamp(24px,4vh,48px) - var(--mb,0px))}  /* 블록 간격 2배 */
 .motto .es{font-family:"PPW Wordmark",var(--latin);font-weight:900;font-size:min(clamp(28px,4.8vw,80px),7.4vw,7.4vh);color:var(--red);line-height:1}
@@ -318,6 +252,13 @@ body[data-lang="en"] .item .kr,body[data-lang="es"] .item .kr,body[data-lang="zh
 body[data-lang="zh"] .item.feature .kr{font-size:min(clamp(40px,5.4vw,96px),9vw)}
 body[data-lang="zh"] .item .kr,body[data-lang="zh"] .drink .kr,body[data-lang="zh"] .foot .big,body[data-lang="zh"] .motto .ko,body[data-lang="zh"] .menu-sec h2 .kr{font-weight:900}
 
+/* ===== 영업시간 : 테두리 없이 문구 + 해·달 문양 ===== */
+.hours{display:grid;justify-items:center;gap:.25em;cursor:pointer;margin-top:calc(-1 * clamp(10px,1.6vh,22px))}
+.hours-t{font-family:"PPW Wordmark",var(--latin);font-weight:900;color:var(--red);line-height:1;
+  font-size:min(clamp(34px,5.8vw,96px),9vw,5.4vh);letter-spacing:.02em}
+.sunmoon{display:block;width:var(--sun-w,min(64vw,440px,19vh));height:auto}
+.hours:active{scale:.97}
+
 /* ===== 언어 전환 버튼 (페이지 2 오른쪽 아래) ===== */
 #lang{position:fixed;right:calc(var(--tab-w) + 16px);bottom:16px;z-index:22;display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .4s}
 body.opened #lang{opacity:1;pointer-events:auto}
@@ -340,51 +281,6 @@ body.opened #lang{opacity:1;pointer-events:auto}
 </head>
 <body class="locked">
 
-<!-- ===================== 셔터 (매장 파사드) ===================== -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
-  <filter id="rough-lite"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
-  <filter id="rough-paint"><feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="2"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
-</svg>
-<div id="shutter" role="button" tabindex="0" aria-label="셔터 열기">
-  <div class="facade">
-    <div class="wall-top"><div class="wordmark">PEOPLE*WÕRKS<small>MEXICAN FOOD CLUB</small></div></div>
-    <div class="overhang"></div>
-    <div class="front">
-      <div class="pillar left"></div><div class="pillar right"></div>
-      <div class="sign"><span>FAJITA</span><span>TACOS</span><span>CERVEZA</span></div>
-      <div class="window">
-        <div class="door">
-          <canvas id="ribs"></canvas>
-          <svg class="badge" viewBox="0 0 680 570" aria-label="PPW 로고와 No Hay Pedo Si Hay Taco Y Tequila 문구">
-            <defs>
-              <path id="arc1" d="M64.1,239.1 A277,277 0 0 0 615.9,239.1"/>
-              <path id="arc2" d="M2.3,244.5 A339,339 0 0 0 677.7,244.5"/>
-              <filter id="stk" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#281800" flood-opacity=".4"/></filter>
-            </defs>
-            <g>
-              <svg class="ppw-logo" x="140" y="15" width="400" height="400" viewBox="0 0 940 940" filter="url(#stk)">
-        <circle cx="470" cy="470" r="458" fill="#E0954B" stroke="#AD2E31" stroke-width="8"/>
-        <circle cx="585" cy="463" r="256" fill="none" stroke="#AD2E31" stroke-width="28"/>
-        <circle cx="332" cy="463" r="256" fill="#E0954B" stroke="#AD2E31" stroke-width="28"/>
-        <path fill="#AD2E31" fill-rule="evenodd" d="M186,330H274A36,36 0 0 1 310,366V370A36,36 0 0 1 274,406H230V440H186ZM230,354H268A12,12 0 0 1 280,366V370A12,12 0 0 1 268,382H230ZM262,410H350A36,36 0 0 1 386,446V450A36,36 0 0 1 350,486H306V520H262ZM306,434H344A12,12 0 0 1 356,446V450A12,12 0 0 1 344,462H306ZM318,490 L358,490 L376,560 L393,490 L423,490 L440,560 L458,490 L498,490 L465,600 L424,600 L408,538 L392,600 L351,600Z"/>
-      </svg>
-            </g>
-            <g class="arc-text" filter="url(#rough-lite)">
-              <text><textPath href="#arc1" startOffset="50%" text-anchor="middle">NO HAY PEDO SI HAY</textPath></text>
-              <text><textPath href="#arc2" startOffset="50%" text-anchor="middle">TACO Y TEQUILA</textPath></text>
-            </g>
-          </svg>
-          <div class="hint"><span>👆 눌러서 열어보세요</span><small>TAP TO OPEN</small></div>
-          <div class="door-rail"></div>
-        </div>
-      </div>
-    </div>
-    <div class="light"></div>
-  </div>
-</div>
-
-<!-- ===================== 북마크 ===================== -->
 <div id="lang" aria-label="언어 선택">
   <button type="button" data-lang="ko" class="on">한국어</button>
   <button type="button" data-lang="en">ENGLISH</button>
@@ -409,7 +305,20 @@ body.opened #lang{opacity:1;pointer-events:auto}
       </div>
       <div class="motto"><span class="es">No Hay Pedo Si Hay<br>Taco Y Tequila</span><span class="ko">타코랑 테킬라가 있는데<br>뭐가 걱정이십니까!</span></div>
     </div>
-    <div class="facts"><button class="fact-btn" data-gal="front" type="button" aria-label="매장 외관 사진 보기"><span class="t18">영업시간</span> <span class="num">12:00 – 22:00</span> <span class="cam">📷</span></button><button class="fact-btn" data-gal="outdoor" type="button" aria-label="1층 야외 테이블 사진 보기"><span class="t18">1층 야외 테이블</span> <span class="cam">📷</span></button><button class="fact-btn" data-gal="hall" type="button" aria-label="2층 홀 사진 보기"><span class="t18">2층 홀</span> <span class="cam">📷</span></button><b>포장 가능</b></div>
+    <div class="hours" data-gal="front" role="button" tabindex="0" aria-label="매장 외관 사진 보기">
+      <div class="hours-t">9AM - 10PM</div>
+      <svg class="sunmoon" viewBox="0 0 360 150" aria-hidden="true">
+        <g fill="none" stroke="var(--red)" stroke-width="7" stroke-linecap="round">
+          <g class="rays">
+            <path d="M110 12v18M110 120v18M40 75h18M162 75h18M60 25l13 13M147 112l13 13M160 25l-13 13M73 112l-13 13"/>
+          </g>
+        </g>
+        <circle cx="110" cy="75" r="40" fill="var(--orange)" stroke="var(--red)" stroke-width="7"/>
+        <path d="M285 35a42 42 0 1 0 0 80 34 34 0 1 1 0-80z" fill="var(--orange)" stroke="var(--red)" stroke-width="7" stroke-linejoin="round"/>
+        <g fill="var(--red)"><circle cx="243" cy="60" r="4"/><circle cx="252" cy="96" r="3"/><circle cx="330" cy="47" r="3"/></g>
+      </svg>
+    </div>
+    <div class="facts"><button class="fact-btn" data-gal="outdoor" type="button" aria-label="1층 야외 테이블 사진 보기"><span class="t18">1층 야외 테이블</span> <span class="cam">📷</span></button><button class="fact-btn" data-gal="hall" type="button" aria-label="2층 홀 사진 보기"><span class="t18">2층 홀</span> <span class="cam">📷</span></button><b>포장 가능</b></div>
     <div class="scroll-cue"><span>↓</span> <span class="t18">아래로 넘겨서 메뉴 보기</span></div>
   </section>
 
@@ -520,98 +429,49 @@ body.opened #lang{opacity:1;pointer-events:auto}
 <script>
 (function(){
   if('scrollRestoration' in history) history.scrollRestoration='manual';
-  const shutter=document.getElementById('shutter');
   const body=document.body;
   const tabs=[...document.querySelectorAll('.tab')];
-  const IDLE_MS=60000; // 60초 무입력 시 셔터 다시 닫힘
-  let idleTimer=null,isOpen=false;
+  body.classList.add('opened');
 
-  // 셔터 골판 텍스처 (매번 같은 모양이 나오도록 고정 시드)
-  const ribCanvas=document.getElementById('ribs');
-  const grainImg=new Image(); grainImg.onload=()=>drawRibs(); grainImg.src=getComputedStyle(document.documentElement).getPropertyValue('--noise').trim().replace(/^url\(["']?|["']?\)$/g,'');
-  function drawRibs(){
-    const w=ribCanvas.clientWidth,h=ribCanvas.clientHeight; if(!w||!h) return;
-    ribCanvas.width=w; ribCanvas.height=h; const c=ribCanvas.getContext('2d');
-    let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
-    const P=Math.max(14,Math.round(h/15));        // 사진처럼 15~16개 골
-    for(let y=0,i=0;y<h;y+=P,i++){
-      const j=0.93+rnd()*0.12;                    // 골마다 밝기 편차
-      const g=c.createLinearGradient(0,y,0,y+P);
-      const col=(r,gg,b,a=1)=>`rgba(${Math.min(255,r*j)|0},${Math.min(255,gg*j)|0},${b*j|0},${a})`;
-      g.addColorStop(0,col(255,238,140)); g.addColorStop(.07,col(250,226,96));
-      g.addColorStop(.12,col(92,64,4)); g.addColorStop(.2,col(176,142,18));
-      g.addColorStop(.35,col(232,202,52)); g.addColorStop(.7,col(222,190,40));
-      g.addColorStop(.92,col(188,152,20)); g.addColorStop(1,col(150,118,10));
-      c.fillStyle=g; c.fillRect(0,y,w,P);
-    }
-    // 긁힘, 먼지, 빛바랜 얼룩
-    for(let k=0;k<70;k++){c.globalAlpha=.08+rnd()*.14;c.fillStyle=rnd()<.5?'#fff6c8':'#5a4200';
-      const x=rnd()*w,y=rnd()*h;c.fillRect(x,y,8+rnd()*60,1);}
-    for(let k=0;k<5;k++){const x=rnd()*w,y=rnd()*h,r=40+rnd()*140;const gr=c.createRadialGradient(x,y,0,x,y,r);
-      gr.addColorStop(0,'rgba(90,60,0,.10)');gr.addColorStop(1,'rgba(90,60,0,0)');c.globalAlpha=1;c.fillStyle=gr;c.fillRect(x-r,y-r,r*2,r*2);}
-    // 위쪽 간판 그림자
-    c.globalAlpha=1; const sh=c.createLinearGradient(0,0,0,h*.12); sh.addColorStop(0,'rgba(40,24,0,.22)'); sh.addColorStop(1,'rgba(40,24,0,0)');
-    c.fillStyle=sh; c.fillRect(0,0,w,h*.12);
-    // 둥근 입자 그레인 (페이지와 같은 타일) — 글자는 캔버스 위에 있어서 영향 없음
-    if(grainImg.complete&&grainImg.naturalWidth){
-      const pc=document.createElement('canvas');pc.width=240;pc.height=240;pc.getContext('2d').drawImage(grainImg,0,0,240,240);
-      c.globalCompositeOperation='source-over';c.globalAlpha=1;c.fillStyle=c.createPattern(pc,'repeat');c.fillRect(0,0,w,h);c.globalCompositeOperation='source-over';
-    }
-  }
-  addEventListener('resize',drawRibs);
-  document.fonts.ready.then(drawRibs); drawRibs();
-
-
-  // ===== 셔터가 열릴 때 로고 자리에 페이지 2 워드마크가 오도록 정렬 =====
-  const storyEl=document.getElementById('story'),facadeEl=shutter.querySelector('.facade');
-  let heroTarget=null;
+  // ===== 첫 화면 배치 : 엠블럼~안내 문구가 한 화면에 담기도록 =====
+  const storyEl=document.getElementById('story');
   function alignHero(){
-    const logo=shutter.querySelector('.ppw-logo'),word=storyEl.querySelector('h1 .one');
-    if(!logo||!word) return;
-    if(!isOpen){                                          // 셔터가 닫혀 있을 때(변형 없는 상태)에 기준점 측정
-      const r=logo.getBoundingClientRect();
-      heroTarget={tx:r.left+r.width/2,ty:r.top+r.height/2};
-    }
-    if(!heroTarget) return;
-    storyEl.style.setProperty('--hx','0px'); storyEl.style.setProperty('--hy','0px');
-    const W=word.getBoundingClientRect(),S=storyEl.getBoundingClientRect();
-    const tx=heroTarget.tx, ty=heroTarget.ty;
-    const dx=tx-(W.left+W.width/2), dy=ty-(W.top+W.height/2);
-    const baseTop=parseFloat(getComputedStyle(storyEl).paddingTop);
-    storyEl.style.setProperty('--hx',dx.toFixed(1)+'px');
-    storyEl.style.setProperty('--hy',Math.max(dy,-baseTop).toFixed(1)+'px');
-    // 첫 화면에 '아래로 넘겨서 메뉴 보기'까지 모두 들어오도록 (화면이 짧으면 간격을 줄여서 맞춤)
-    ['--fx','--my','--mb'].forEach(v=>storyEl.style.setProperty(v,'0px')); storyEl.style.removeProperty('--cue-fs');
-    const mottoEl=storyEl.querySelector('.motto'), cueEl=storyEl.querySelector('.scroll-cue');
-    const C=cueEl.getBoundingClientRect();
+    ['--fx','--my','--mb','--hy'].forEach(v=>storyEl.style.setProperty(v,'0px')); storyEl.style.removeProperty('--cue-fs'); storyEl.style.removeProperty('--sun-w'); storyEl.style.removeProperty('--az-h');
+    const mottoEl=storyEl.querySelector('.motto'), cueEl=storyEl.querySelector('.scroll-cue'), topEl=storyEl.querySelector('.hero-block');
     const gap=parseFloat(getComputedStyle(storyEl).rowGap)||0, mcs=getComputedStyle(mottoEl);
-    let need=innerHeight-12-C.bottom;                              // '아래로 넘겨서 메뉴 보기'까지 첫 화면에 다 들어오게
-    if(need>=0){ storyEl.style.setProperty('--fx',Math.min(need,innerHeight*0.2).toFixed(1)+'px'); }   // 세로로 긴 화면은 빈 공간 상한
-    else{                                                          // 화면이 짧으면 문구 아래·위 간격을 차례로 줄여서 맞춤
+    const baseTop=parseFloat(getComputedStyle(storyEl).paddingTop);
+    let need=innerHeight-12-cueEl.getBoundingClientRect().bottom;
+    if(need>=0){
+      // 남는 공간의 45%만 위쪽에 배분 → 사진처럼 위쪽에 여유가 있는 비례
+      storyEl.style.setProperty('--hy',(need*0.45).toFixed(1)+'px');
+      const rest=innerHeight-12-cueEl.getBoundingClientRect().bottom;
+      if(rest>0) storyEl.style.setProperty('--fx',Math.min(rest,innerHeight*0.16).toFixed(1)+'px');
+    }else{
       let up=-need;
       const mb=Math.max(0,Math.min(up,parseFloat(mcs.marginBottom)-4)); up-=mb; storyEl.style.setProperty('--mb',mb.toFixed(1)+'px');
       const fx=Math.max(0,Math.min(up,gap-14)); up-=fx; storyEl.style.setProperty('--fx',(-fx).toFixed(1)+'px');
       const my=Math.max(0,Math.min(up,parseFloat(mcs.marginTop)+gap-12)); storyEl.style.setProperty('--my',my.toFixed(1)+'px');
-      // 그래도 모자라면 : 로고 위치와의 정렬을 조금 양보하고 전체를 위로 올림
       const left=innerHeight-12-cueEl.getBoundingClientRect().bottom;
-      if(left<0){
-        const hy=parseFloat(storyEl.style.getPropertyValue('--hy'))||0;
-        storyEl.style.setProperty('--hy',Math.max(hy+left,-baseTop).toFixed(1)+'px');
+      if(left<0) storyEl.style.setProperty('--hy',Math.max(left,-baseTop).toFixed(1)+'px');
+      const az=storyEl.querySelector('.aztec');
+      for(let i=0;i<3 && az && cueEl.getBoundingClientRect().bottom>innerHeight-12;i++){
+        storyEl.style.setProperty('--az-h',(az.getBoundingClientRect().height*0.8).toFixed(1)+'px');
       }
-      // 그래도 넘치면(번역문이 길어 두 줄이 되는 경우) 안내 문구 크기를 줄여서 맞춤
       let over=cueEl.getBoundingClientRect().bottom-(innerHeight-12);
+      const sun=storyEl.querySelector('.sunmoon');
+      for(let i=0;i<4 && over>0 && sun;i++){
+        const cw=sun.getBoundingClientRect().width;
+        storyEl.style.setProperty('--sun-w',(cw*0.8).toFixed(1)+'px');
+        over=cueEl.getBoundingClientRect().bottom-(innerHeight-12);
+      }
       for(let i=0;i<4 && over>0;i++){
         const fs=parseFloat(getComputedStyle(cueEl).fontSize);
         storyEl.style.setProperty('--cue-fs',(fs*0.82).toFixed(1)+'px');
         over=cueEl.getBoundingClientRect().bottom-(innerHeight-12);
       }
     }
-    facadeEl.style.setProperty('--zx',tx.toFixed(1)+'px');   // 확대도 로고 중심에서
-    facadeEl.style.setProperty('--zy',ty.toFixed(1)+'px');
   }
-  addEventListener('resize',()=>{alignHero();});
-  document.fonts.ready.then(alignHero); addEventListener('load',alignHero); alignHero();
-
+  addEventListener('resize',alignHero); document.fonts.ready.then(alignHero); addEventListener('load',alignHero); alignHero();
 
   // ===== 셔터가 닫혀 있는 동안 사진을 미리 풀어둠 (열릴 때 멈칫하지 않게) =====
   function predecode(){
@@ -622,35 +482,7 @@ body.opened #lang{opacity:1;pointer-events:auto}
   }
   addEventListener('load',()=>setTimeout(predecode,300));
 
-  function openShutter(){
-    if(isOpen) return; window.scrollTo({top:0,behavior:'auto'}); alignHero(); isOpen=true;
-    shutter.classList.add('rattle');
-    setTimeout(()=>{
-      shutter.classList.remove('rattle');
-      shutter.classList.add('rolling');                       // 셔터가 간판 속으로 말려 올라감
-      body.classList.remove('locked');
-      setTimeout(()=>{
-        shutter.classList.add('entering');                    // 열린 창 안으로 들어가는 느낌
-        body.classList.remove('locked'); body.classList.add('opened');
-        setTimeout(()=>shutter.classList.add('gone'),950); if(typeof tabsVis==='function') tabsVis();
-      },1350);
-    },340);
-    resetIdle();
-  }
-  function closeShutter(){
-    isOpen=false; window.scrollTo({top:0,behavior:'auto'});
-    shutter.classList.remove('gone','entering','rolling');
-    body.classList.add('locked'); body.classList.remove('opened');
-    clearTimeout(idleTimer); drawRibs(); requestAnimationFrame(alignHero); body.classList.remove('tabs-in');
-    if(typeof odHide==='function') odHide();
-  }
-  function resetIdle(){ if(!isOpen) return; clearTimeout(idleTimer); idleTimer=setTimeout(closeShutter,IDLE_MS); }
-
-  shutter.addEventListener('click',openShutter);
-  ['wheel','touchmove'].forEach(ev=>shutter.addEventListener(ev,e=>{if(!isOpen)e.preventDefault();},{passive:false}));
-  shutter.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openShutter();}});
-  ['pointerdown','scroll','touchmove','wheel','keydown'].forEach(ev=>window.addEventListener(ev,resetIdle,{passive:true}));
-  document.getElementById('again').addEventListener('click',closeShutter);
+  document.getElementById('again').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 
   tabs.forEach(t=>t.addEventListener('click',()=>document.getElementById(t.dataset.target).scrollIntoView({behavior:'smooth',block:'start'})));
   const secs=tabs.map(t=>document.getElementById(t.dataset.target));
@@ -742,8 +574,19 @@ body.opened #lang{opacity:1;pointer-events:auto}
       const w=rg.getBoundingClientRect().width||1;
       cap=Math.min(cap,100*avail/w);                      // 가장 긴 제목이 들어가는 크기에 전부 맞춤
     });
-    const fs=Math.min(cap,base*3,innerHeight*0.26).toFixed(1)+'px';
-    hs.forEach(h=>h.style.fontSize=fs);
+    const fsNum=Math.min(cap,base*3,innerHeight*0.26);
+    hs.forEach(h=>h.style.fontSize=fsNum.toFixed(1)+'px');
+    // 부제(타코 · 브리또 …) : 모든 섹션 같은 크기, 기본(0.9em)의 1.3배까지
+    let krCap=Infinity;
+    hs.forEach(h=>{
+      const kr=h.querySelector('.kr'); if(!kr) return;
+      kr.style.fontSize='100px';
+      const rg2=document.createRange(); rg2.selectNodeContents(kr);
+      const w=rg2.getBoundingClientRect().width||1;
+      krCap=Math.min(krCap,100*h.getBoundingClientRect().width/w);
+    });
+    const krFs=Math.min(krCap,fsNum*0.9*2.6);   // 부제 : 기준의 2.6배(직전의 2배)까지, 폭에 맞춰 통일
+    hs.forEach(h=>{const kr=h.querySelector('.kr'); if(kr) kr.style.fontSize=krFs.toFixed(1)+'px';});
   }
   addEventListener('resize',fitHeadings); document.fonts.ready.then(fitHeadings); fitHeadings();
 
@@ -771,7 +614,7 @@ body.opened #lang{opacity:1;pointer-events:auto}
   addEventListener('scroll',markActive,{passive:true}); markActive();
   // 북마크 : 메뉴 섹션(TACOS, 만두 타코)이 화면 아래에서 보이기 시작하는 순간 슬라이드 인, 소개 화면으로 돌아가면 슬라이드 아웃
   const menuStart=document.getElementById('tacos');
-  function tabsVis(){ body.classList.toggle('tabs-in', isOpen && menuStart.getBoundingClientRect().top < innerHeight*0.97); }
+  function tabsVis(){ body.classList.toggle('tabs-in', menuStart.getBoundingClientRect().top < innerHeight*0.97); }
   addEventListener('scroll',tabsVis,{passive:true}); addEventListener('resize',tabsVis); tabsVis();
 
   document.querySelectorAll('.item').forEach(el=>el.addEventListener('click',()=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}));
@@ -830,6 +673,36 @@ body.opened #lang{opacity:1;pointer-events:auto}
     el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();odOpen(el.dataset.gal);}});
   });
   od.addEventListener('click',odHide);
+
+  // ===== 무터치 시 자동 스크롤 : 첫 화면 → 맨 아래로 균일 속도 스윕, 터치하면 맨 위로 =====
+  const AUTO_IDLE=25000;      // 손이 닿지 않고 25초 지나면 시작
+  const SWEEP_MS=75000;       // 맨 위 → 맨 아래 한 번 훑는 시간
+  const HOLD_MS=4000;         // 맨 아래에서 잠깐 멈춤
+  let autoTimer=null, autoRaf=0, autoLast=0, autoOn=false;
+  function autoStep(t){
+    if(!autoOn) return;
+    if(!autoLast) autoLast=t;
+    const dt=Math.min(100,t-autoLast); autoLast=t;
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const speed=max/(SWEEP_MS/1000);
+    if(scrollY>=max-1){
+      autoOn=false; autoRaf=0;
+      setTimeout(()=>{ scrollTo({top:0,behavior:'smooth'}); autoTimer=setTimeout(startAuto,HOLD_MS+2500); },HOLD_MS);
+      return;
+    }
+    scrollTo(0, scrollY+speed*dt/1000);
+    autoRaf=requestAnimationFrame(autoStep);
+  }
+  function startAuto(){ if(autoOn) return; autoOn=true; autoLast=0; autoRaf=requestAnimationFrame(autoStep); }
+  function stopAuto(){ autoOn=false; if(autoRaf) cancelAnimationFrame(autoRaf); autoRaf=0; clearTimeout(autoTimer); }
+  function userTouch(){
+    const wasAuto=autoOn;
+    stopAuto();
+    if(wasAuto) scrollTo({top:0,behavior:'smooth'});   // 자동으로 흐르던 중 손이 닿으면 맨 위로
+    autoTimer=setTimeout(startAuto,AUTO_IDLE);
+  }
+  ['pointerdown','touchstart','wheel','keydown'].forEach(ev=>addEventListener(ev,userTouch,{passive:true}));
+  autoTimer=setTimeout(startAuto,AUTO_IDLE);
 })();
 </script>
 </body>
